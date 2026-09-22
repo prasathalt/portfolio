@@ -5,7 +5,6 @@
     "app/**/*.ts",
     "app/**/*.tsx",
     "vite.config.ts",
-    "eslint.config.js",
     "next-env.d.ts",
     "types.d.ts",
     ".next/types/**/*.ts"

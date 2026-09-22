@@ -270,7 +270,7 @@ export default function Portfolio() {
               loop
               playsInline
               preload="auto"
-              poster={motionPoster}
+              poster={motionPoster.src}
               aria-hidden="true"
             >
               <source src={motionAsset.url} type="video/mp4" />
@@ -396,7 +396,7 @@ export default function Portfolio() {
               loop
               playsInline
               preload="metadata"
-              poster={motionPoster}
+              poster={motionPoster.src}
             >
               <source src={motionAsset.url} type="video/mp4" />
             </video>
@@ -418,7 +418,7 @@ export default function Portfolio() {
                 I turn ideas into clear visual systems.
               </p>
               <p className="about-body gsap-fade">
-                With 3+ years across branding, digital campaigns, visual communication, UI/UX, motion graphics and AI-driven creativity — I craft work with a designer's eye and a director's instinct.
+                With 3+ years across branding, digital campaigns, visual communication, UI/UX, motion graphics and AI-driven creativity — I craft work with a designer&apos;s eye and a director&apos;s instinct.
               </p>
               <div className="caps-grid gsap-fade">
                 {capabilities.map(({ label, text }) => (
@@ -453,7 +453,7 @@ export default function Portfolio() {
               loop
               playsInline
               preload="metadata"
-              poster={motionPoster}
+              poster={motionPoster.src}
               aria-hidden="true"
             >
               <source src={motionAsset.url} type="video/mp4" />
@@ -461,7 +461,7 @@ export default function Portfolio() {
           </div>
 
           <div className="contact-content">
-            <p className="contact-eyebrow gsap-fade">05 / Let's collaborate</p>
+            <p className="contact-eyebrow gsap-fade">05 / Let&apos;s collaborate</p>
             <h2 className="contact-heading gsap-fade">
               Make<br />something<br /><em>move.</em>
             </h2>
