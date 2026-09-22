@@ -1,4 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+"use client";
+
+import Link from "next/link";
 import { ArrowUpRight, Play, ArrowRight } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
@@ -6,13 +8,13 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import Lenis from "lenis";
 
-import motionAsset from "../assets/motion-graphics.mp4.asset.json";
-import motionPoster from "../assets/motion-poster.jpg";
-import resumeAsset from "../assets/prasath-resume.pdf.asset.json";
-import logoMca from "../assets/projects/logo-mca.webp.asset.json";
-import logoOzmex from "../assets/projects/logo-ozmex.webp.asset.json";
-import logoDeepam from "../assets/projects/logo-deepam.webp.asset.json";
-import { projects, type AssetJson } from "../lib/data";
+import motionAsset from "../src/assets/motion-graphics.mp4.asset.json";
+import motionPoster from "../src/assets/motion-poster.jpg";
+import resumeAsset from "../src/assets/prasath-resume.pdf.asset.json";
+import logoMca from "../src/assets/projects/logo-mca.webp.asset.json";
+import logoOzmex from "../src/assets/projects/logo-ozmex.webp.asset.json";
+import logoDeepam from "../src/assets/projects/logo-deepam.webp.asset.json";
+import { projects, type AssetJson } from "../src/lib/data";
 
 const experience = [
   ["Dec 2025 — Present", "Graphic Designer", "Starlfinx Fintech Technology · Dubai"],
@@ -98,12 +100,10 @@ function Loader({ onDone }: { onDone: () => void }) {
       },
     });
 
-    // Fade in elements
     tl.to([logoRef.current, lineRef.current, counterRef.current], {
       opacity: 1, duration: 0.4, stagger: 0.1, ease: "power2.out",
     });
 
-    // Counter 0 → 100
     const counter = { val: 0 };
     tl.to(counter, {
       val: 100,
@@ -114,14 +114,13 @@ function Loader({ onDone }: { onDone: () => void }) {
       },
     }, "-=0.2");
 
-    // Progress bar
     tl.to(barRef.current, {
       width: "100%",
       duration: 1.6,
       ease: "power2.inOut",
     }, "<");
 
-    tl.to({}, { duration: 0.3 }); // brief pause before exit
+    tl.to({}, { duration: 0.3 });
   }, { scope: loaderRef });
 
   return (
@@ -154,7 +153,11 @@ function ScrollProgress() {
 }
 
 // ─── Main Portfolio ───────────────────────────────────────────────────────────
-function Portfolio() {
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+export default function Portfolio() {
   const mainRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLElement>(null);
   const heroKickerRef = useRef<HTMLSpanElement>(null);
@@ -164,7 +167,6 @@ function Portfolio() {
   const lenisRef = useRef<Lenis | null>(null);
   const loaderDone = useRef(false);
 
-  // Init Lenis
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
@@ -181,7 +183,6 @@ function Portfolio() {
     return () => lenis.destroy();
   }, []);
 
-  // Hero entrance (triggered after loader finishes)
   const playHeroEntrance = () => {
     const tl = gsap.timeline();
     tl.to(navRef.current, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" });
@@ -192,14 +193,12 @@ function Portfolio() {
     tl.to(heroMetaRef.current, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, "-=0.4");
   };
 
-  // Set initial hidden states
   useEffect(() => {
     gsap.set([navRef.current, heroKickerRef.current, heroLine1Ref.current, heroLine2Ref.current, heroMetaRef.current], {
       opacity: 0, y: 20,
     });
   }, []);
 
-  // ScrollTrigger reveals for sections
   useGSAP(() => {
     if (!loaderDone.current) return;
     const elements = document.querySelectorAll(".gsap-fade, .gsap-fade-left");
@@ -218,7 +217,6 @@ function Portfolio() {
     loaderDone.current = true;
     playHeroEntrance();
 
-    // Now set up scroll triggers
     const elements = document.querySelectorAll(".gsap-fade, .gsap-fade-left");
     elements.forEach((el) => {
       gsap.fromTo(el,
@@ -241,7 +239,6 @@ function Portfolio() {
       <ScrollProgress />
 
       <div ref={mainRef}>
-        {/* ── Nav ── */}
         <nav className="site-nav" ref={navRef} aria-label="Main navigation">
           <a className="nav-logo" href="#top" aria-label="Prasath S home">
             PRASATH <span className="nav-logo-symbol">&nbsp;S</span>
@@ -264,7 +261,6 @@ function Portfolio() {
           </a>
         </nav>
 
-        {/* ── Hero ── */}
         <header className="hero" id="top">
           <div className="hero-bg">
             <video
@@ -316,7 +312,6 @@ function Portfolio() {
           </div>
         </header>
 
-        {/* ── Marquee ── */}
         <div className="marquee-section" aria-label="Creative capabilities">
           <div className="marquee-track">
             {marqueeFull.map((item, i) => (
@@ -327,7 +322,6 @@ function Portfolio() {
           </div>
         </div>
 
-        {/* ── Work ── */}
         <section className="work-section" id="work">
           <div className="work-heading gsap-fade">
             <div className="section-label">
@@ -338,7 +332,6 @@ function Portfolio() {
             <h2>Selected<br /><span>Work</span></h2>
           </div>
 
-          {/* Logo Folio */}
           <div className="logo-folio gsap-fade">
             <div className="project-meta">
               <div className="project-num">01</div>
@@ -366,11 +359,10 @@ function Portfolio() {
             </div>
           </div>
 
-          {/* Work Preview Carousel */}
           <div className="work-preview-container gsap-fade" style={{ marginTop: "4rem" }}>
             <div className="work-preview-track" style={{ display: "flex", gap: "2rem", overflowX: "auto", paddingBottom: "2rem", scrollbarWidth: "none" }}>
               {projects.map((project) => (
-                <Link to={"/work" as any} key={project.id} className="preview-card" style={{ minWidth: "80vw", display: "block" }}>
+                <Link href="/work" key={project.id} className="preview-card" style={{ minWidth: "80vw", display: "block" }}>
                   <figure style={{ aspectRatio: "16/9", overflow: "hidden", background: "var(--black-2)", marginBottom: "1rem" }}>
                     <img src={project.images[0].url} alt={project.name} style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.6s ease" }} />
                   </figure>
@@ -383,14 +375,13 @@ function Portfolio() {
             </div>
 
             <div style={{ display: "flex", justifyContent: "center", marginTop: "3rem" }}>
-              <Link to={"/work" as any} className="btn-primary" style={{ padding: "1rem 3rem", fontSize: "1rem" }}>
+              <Link href="/work" className="btn-primary" style={{ padding: "1rem 3rem", fontSize: "1rem" }}>
                 Explore All Work <ArrowRight size={18} />
               </Link>
             </div>
           </div>
         </section>
 
-        {/* ── Reel ── */}
         <section className="reel-section" id="reel">
           <div className="section-label gsap-fade">
             <span className="eyebrow">01 / Motion Reel</span>
@@ -419,7 +410,6 @@ function Portfolio() {
           </div>
         </section>
 
-        {/* ── About ── */}
         <section className="about-section" id="about">
           <div className="about-grid">
             <div>
@@ -455,7 +445,6 @@ function Portfolio() {
           </div>
         </section>
 
-        {/* ── Contact ── */}
         <footer className="contact-section" id="contact">
           <div className="contact-bg">
             <video
